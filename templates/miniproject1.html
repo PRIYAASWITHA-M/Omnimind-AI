@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>omniMind AI</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
+</head>
+<style>
+    html{
+        scroll-behavior: smooth;
+    }
+    #typing::after{
+        content: "|";
+        animation: blink 0.7s infinite;
+    }
+    @keyframes blink{
+        50%{
+            opacity:0;
+        }
+    }
+    *{
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body{
+          background: linear-gradient(to bottom right,#0f172a, #111827, #1e293b);
+          color: white;
+          font-family: 'poppins', sans-serif;
+          scroll-behavior: smooth;
+    }
+    body::before{
+        content: "";
+        position: fixed;
+        width: 400px;
+        height: 400px;
+        background: #38bdf8;
+        filter: blur(180px);
+        top: -100px;
+        left: -100px;
+        opacity: 0.2;
+    }
+    body::after{
+        content: "";
+        position: fixed;
+        width: 300px;
+        height: 300px;
+        background: #8b5cf6;
+        filter: blur(180px);
+        bottom: -100px;
+        right: -100px;
+        opacity: 0.2;
+    }
+    nav{
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 20px 60px;
+          position: sticky;
+          top: 0;
+          backdrop-filter: blur(10px);
+          background: rgba(15,23,42,0.7);
+          z-index: 1000;
+    }
+    nav ul{
+        display: flex;
+        gap: 30px;
+        list-style: none;
+    }
+    nav li{
+        cursor: pointer;
+    }
+    .hero{
+       min-height: 100vh; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 50px 20px;
+    }
+    .content{
+        width: 700px;
+        margin: auto;
+    }
+    .content h2{
+        font-size: 35px;
+        margin-bottom: 20px;
+    }
+    .content p{
+        font-size: 16px;
+        color: lightgrey;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+    button{
+        padding: 15px 35px;
+        border: none;
+        border-radius: 12px;
+        background: linear-gradient( 45deg,#38bdf8,#0ea5e9 );
+        color: white;
+        font-size: 18px;
+        cursor: pointer;
+        box-shadow: 0 0 20px rgb(56,189,248,0.5);
+        transition: 0.3s;
+    }
+    button:hover{
+        background-color: #0ea5e9;
+        transform: scale(1.05);
+        transition: 0.3s;
+        box-shadow: 0 0 25px rgba(56,189,248,0.7);
+    }
+    nav li:hover{
+        color: #38bdf8;
+        transition: 0.3s;
+     }
+     .features{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+        padding: 60px;
+        flex-wrap: wrap;
+     }
+     .card{
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.08);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 30px;
+        width: 300px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        transition: 0.4S;
+        animation: fadeUp 1s ease;
+     }
+     .card i{
+        font-size: 50px;
+        color: #38bdf8;
+        margin-bottom: 20px;
+     }
+     .card:hover{
+        transform: translateY(-10px);
+        transition: 0.3s;
+        box-shadow: 0 0 30px rgba(56,189,248,0.4);
+     }
+     @keyframes fadeUp{
+        from{
+            opacity: 0;
+            transform: translateY(50px);
+        }
+        to{
+            opacity: 1;
+            transform: translateY(0);
+        }
+     }
+     h1,h2{
+        text-shadow: 0 0 10px rgba(56,189,248,0.5);
+     }
+     footer{
+        text-align: center;
+        padding: 20px;
+        background: #0f172a;
+        color: lightgrey;
+     }
+     .about {
+        text-align: center;
+        padding: 80px 20px;
+     }
+     .about h2{
+        font-size: 40px;
+        margin-bottom: 20px;
+        color: #38bdf8;
+     }
+     .about p{
+        width: 90%;
+        margin: auto;
+        line-height: 1.8;
+        color: lightgray;
+        font-size: 18px;
+     }
+     .chatbot{
+        text-align: center;
+        padding: 80px 20px;
+     }
+     .chatbot input{
+        padding: 15px;
+        width: 90%;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        margin-top: 20px;
+        background: #1e293b;
+        color: white;
+        font-size: 16px;
+     }
+     .chatbot h2{
+        color: #38bdf8;
+     }
+     .loader{
+        width: 40px;
+        height: 40px;
+        border: 4px solid #38bdf8;
+        border-top: 4px solid transparent;
+        border-radius: 50%;
+        margin: 20px auto;
+        animation: spin 1s linear infinite;
+        display: none;
+     }
+     @keyframes spin{
+        100%{
+            transform: rotate(360deg);
+        }
+     }
+     .askBtn{
+        margin-left: 10px;
+     }
+     #response{
+        margin-top: 30px;
+        color: #38bdf8;
+        font-size: 20px;
+     }
+     .contact{
+        text-align: center;
+        padding: 80px 20px;
+     }
+     .contact h2{
+        font-size: 40px;
+        margin-bottom: 20px;
+        color: #38bdf8;
+     }
+     .contact p{
+        font-size: 18px;
+        color: lightgrey;
+        margin: 10px 0;
+     }
+     nav a{
+        text-decoration: none;
+        color: white;
+     }
+     nav a:hover{
+        color: #38bdf8;
+     }
+     .light-mode{
+        background: white;
+        color: black;
+     }
+     .light-mode nav a{
+        color: black;
+     }
+     .light-mode .card{
+        background: rgba(0,0,0,0.08);
+        color: black;
+     }
+     .light-mode p{
+        color: #1e293b;
+     }
+     .light-mode input{
+        background: #e2e8f0;
+        color: black;
+     }
+     .light-mode footer{
+        background: #e2e8f0;
+     }
+     #voiceBtn{
+        margin-left: 10px;
+     }
+     #response{
+        margin-top: 30px;
+        padding: 20px;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+        background: rgba(255,255,255,0.08);
+        border-radius: 15px;
+        backdrop-filter: blur(10px);
+     }
+     button:active{
+        transform: scale(0.95);
+     }
+      @media (max-width:768px){
+        nav{
+            flex-direction: column;
+            padding: 20px;
+        }
+        nav ul{
+            flex-direction: column;
+            text-align: center;
+            gap: 15px;
+        }
+        .content{
+            width: 90%;
+        }
+        .content h2{
+            font-size: 28px;
+        }
+        .features{
+            padding: 20px;
+        }
+        .card{
+            width: 100%;
+        }
+     }
+</style>
+<body>
+<nav>
+    <h1>OmniMind AI</h1>
+
+    <ul>
+        <li>Home</li>
+        <li> <a href="#features">features</a></li>
+        <li> <a href="#about"> About</a></li>
+        <li><a href="#contact"> Contact</a></li>
+    </ul>
+    <button id="themeToggle"> 🌜</button>
+</nav>
+<section class ="hero">
+    <div class="content">
+<h2 id="typing"> </h2>
+<p>
+    AI-powered productivity, study planning,
+    career guidance and smart automation. 
+</p>
+<button onclick = "openDashboard()"> Launch OmniMind AI</button>
+    </div>
+</section>
+<section class="features" id="features">
+    <div class="card">
+        <i class="fa-solid fa-brain"></i>
+        <h3> Ai study planner</h3>
+        <p> Create smart study schedules automatically.</p>
+    </div>
+    <div class="card">
+        <i class="fa-solid fa-briefcase"></i>
+        <h3> Career Guidance</h3>
+        <p>Get Ai suggestions for jobs and skills.</p>
+    </div>
+    <div class="card">
+        <i class="fa-solid fa-bolt"></i>
+        <h3> Task Automation</h3>
+        <p> Automate daily productivity workflows.</p>
+    </div>
+</section>
+<section class="about" id="about">
+    <h2>About OmniMind AI</h2>
+    <p> OmniMind AI is an intelligent productivity platform
+        designed to help students improve learning, 
+        planning and career growth using Artifical Intelligence
+    </p>
+</section>
+<section class="chatbot">
+    <h2>Ask OmniMind AI</h2>
+    <input type="text" id="userInput" placeholder="Ask something...">
+    <br><br>
+    <input type="file" id="fileInput" accept="image/*, video/*">
+    <br> <br>
+    <button id="askBtn"> Ask AI</button>
+    <button id="voiceBtn"> speak</button>
+    <button id="stopVoiceBtn"> Stop </button>
+    <div class="loader" id="loader"></div>
+    <div id="response"> AI response appears here...</div>
+    
+</section>
+<section class="contact" id="contact">
+    <h2>Contact Us</h2>
+    <p>Email:omnimmindai@gmail.com</p>
+    <p>Phone:9846338902</p>
+    <p>Location:Coimbatore,India</p>
+</section>
+<footer>
+    <p>&copy;2026 OmniMind AI | All Rights Reserved </p>
+</footer>
+<script src="{{url_for('static',filename='miniproject1.js')}} "></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OmniMind AI Login</title>
+    <link rel="stylesheet" href="{{url_for('static',filename='login.css')}}">
+    <link  href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+    }
+    body{
+        font-family: "poppins",sans-serif;
+        background: linear-gradient(to bottom right,#0f172a,#111827,#1e293b);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        color: white;
+    }
+    body::before{
+        content: "";
+        position: absolute;
+        width: 400px;
+        height: 400px;
+        background: #8b5cf8;
+        filter: blur(180px);
+        top: -100px;
+        left: -100px;
+        opacity: 0.3;
+    }
+    body::after{
+         content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: #8b5cf6;
+        filter: blur(180px);
+        top: -100px;
+        left: -100px;
+        opacity: 0.3;
+    }
+    .container{
+        position: relative;
+        z-index: 1;
+    }
+    .login-box h1{
+        margin-bottom: 10px;
+        color: #38bdf8;
+    }
+    .login.box p{
+        color:lightgrey;
+        margin-bottom: 20px;
+    }
+    input{
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        outline: none;
+        background: #1e293b;
+        color: white;
+        font-size: 15px;
+    }
+    button{
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        margin-top: 20px;
+        background: linear-gradient(45deg,#38bdf8,#0ea5e9);
+        color: white;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    button:hover{
+        transform:scale(1.03);
+        box-shadow: 0 0 20px rgba(56,189,248,0.6);
+        }
+        #message{
+            margin-top: 20px;
+            color:#38bdf8;
+        }
+        textarea{
+            width: 100%;
+            padding: 15px;
+            border: none;
+        }
+</style>
+<body>
+    <div class="container">
+        <div class="login-box">
+            <h1>OmniMind AI</h1>
+            <p> Your Intelligent Operating System</p>
+            <input type="text" id="username" placeholder="Enter Username">
+            <input type="email" id="email" placeholder="Enter Email">
+            <input type="password" id="password" placeholder="Enter password">
+            <button id="loginBtn"> Login</button>
+            <p id="message"></p>
+        </div>
+    </div>
+    <script src="{{url_for('static',filename='miniproject1login.js')}}"></script>
+</body>
+</html>

@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>OmniMind Dashboard</title>
+        <link rel="stylesheet" href="{{url_for('static',filename='dashboard.css')}}">
+        <link href="https://fonts.googleapis.com/css2?family=poppins:wght@300;400;500;600;700;&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    </head>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            font-family: 'poppins',sans-serif;
+            background: #0f172a;
+            color: white;
+        }
+        .container{
+            display: flex;
+            min-height: 100vh;
+        }
+        .sidebar{
+            width: 250px;
+            background: #111827;
+            padding: 30px 20px;
+        }
+        .sidebar h2{
+            color:#38bdf8;
+            margin-bottom: 40px;
+        }
+        .sidebar ul{
+            list-style: none;
+        }
+        .sidebar li{
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .sidebar li:hover{
+            background: rgba(56,189,248,0.2);
+        }
+        .sidebar a{
+            text-decoration: none;
+            color: white;
+            display: block;
+        }
+        .sidebar a:hover{
+            color: #38bdf8;
+        }
+        .main{
+            flex: 1;
+            padding: 30px;
+        }
+        .header{
+            margin-bottom: 30px;
+        }
+        .header h1{
+            color:#38bdf8;
+        }
+        .cards{
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+        .card{
+            flex: 1;
+            min-width: 220px;
+            padding:25px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(10px);
+        }
+        .planner{
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
+        }
+        .planner input{
+            width: 100%;
+            padding: 15px;
+            margin: 15px 0;
+            border: none;
+            border-radius: 10px;
+            background: #1e293b;
+            color: white;
+        }
+        button{
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            background: #38bdf8;
+            color: white;
+            cursor: pointer;
+        } 
+        .task-manager{
+            margin-top: 40px;
+            padding: 30px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.08);
+        }
+        .task-manager h2{
+            margin-bottom: 20px;
+        }
+        #taskList{
+            margin-top: 20px;
+            list-style: none;
+        }
+        #taskList li{
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        li{
+            margin: 15px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 10px;
+            list-style: none;
+        }
+        .doneBtn{
+            margin-left: 10px;
+            background: green;
+        }
+        .deleteBtn{
+            background: red;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        #planOutput{
+            margin-top: 20px;
+            color: #38bdf8;
+        }
+        textarea{
+            width: 100%;
+            padding: 15px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #1e293b;
+            color: white;
+            font-size: 16px;
+        }
+        #settingsMenu{
+list-style:none;
+margin-top:20px;
+}
+
+#settingsMenu li{
+
+background:#1e293b;
+
+padding:15px;
+
+margin:12px 0;
+
+border-radius:10px;
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+cursor:pointer;
+
+transition:0.3s;
+
+}
+
+#settingsMenu li:hover{
+
+background:#334155;
+
+transform:translateX(8px);
+
+}
+        #summaryOutput,
+        #careerOutput{
+            margin-top: 20px;
+            color: #38bdf8;
+            font-size: 18px;
+        }
+        #priority,
+        #dueDate{
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            margin: 10px;
+            background: #1e293b;
+            color: white;
+        }
+        #taskStats{
+            display: flex;
+            gap: 30px;
+            margin-top: 15px;
+        }
+        progress{
+            width: 100%;
+            height: 20px;
+            margin-top: 15px;
+        }
+        .light-mode{
+
+background:#f1f5f9;
+color:black;
+
+}
+
+.light-mode .sidebar{
+
+background:#e2e8f0;
+
+}
+
+.light-mode .main{
+
+background:white;
+
+}
+
+.light-mode .planner,
+.light-mode .task-manager,
+.light-mode .card{
+
+background:#e2e8f0;
+color:black;
+
+}
+
+.light-mode input,
+.light-mode textarea{
+
+background:white;
+color:black;
+
+}
+
+.light-mode #settingsMenu li{
+
+background:#cbd5e1;
+color:black;
+
+}
+
+.light-mode h1,
+.light-mode h2,
+.light-mode h3{
+
+color:#0f172a;
+
+}
+#settingsDropdown{
+padding-left:20px;
+margin-top:10px;
+}
+
+#settingsDropdown li{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+background:#1e293b;
+
+padding:10px;
+
+margin:8px 0;
+
+border-radius:8px;
+
+}
+#historySelect{
+
+width:120px;
+
+padding:5px;
+
+border-radius:6px;
+
+border:none;
+
+background:#0f172a;
+
+color:white;
+
+font-size:12px;
+
+}
+
+.light-mode #historySelect{
+
+background:white;
+
+color:black;
+
+}
+#voiceToggle{
+
+width: 20px !important;;
+height:20px;
+cursor:pointer;
+
+}
+#notifyToggle{
+
+width: 20px !important;
+height:20px;
+cursor:pointer;
+
+}
+        @media(max-width:768px){
+            .container{
+                flex-direction: column;
+            }
+            .sidebar{
+                width: 100%;
+            }
+            .cards{
+                flex-direction: column;
+            }
+        }
+    </style>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>OmniMind AI</h2>
+
+        <ul>
+
+            <li>
+                <a href="#dashboardSection">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="#plannerSection">
+                <i class="fa-solid fa-book"></i>
+                Study Planner
+                </a>
+            </li>
+
+            <li>
+                <a href="#taskSection">
+                <i class="fa-solid fa-list-check"></i>
+                Tasks
+                </a>
+            </li>
+
+            <li>
+                <a href="#aiSection">
+                <i class="fa-solid fa-robot"></i>
+                AI Assistant
+                </a>
+            </li>
+
+            <!-- SETTINGS DROPDOWN -->
+
+            <li onclick="toggleSettings()">
+
+                <i class="fa-solid fa-gear"></i>
+                Settings ▼
+
+            </li>
+
+            <ul id="settingsDropdown"
+style="display:none;">
+
+<li>
+<span>🌙 Dark / Light Mode</span>
+
+<button id="themeToggle">
+Switch
+</button>
+</li>
+
+<li id ="historyBtn">
+<span>🕘 Search History</span>
+<select  id="historySelect">
+    <option value="Recent"></option>
+</select>
+</li>
+
+<li>
+<span>🔔 Notifications</span>
+
+<input
+type="checkbox"
+id="notifyToggle">
+</li>
+
+<li>
+<span>🎤 AI Voice</span>
+
+<input
+type="checkbox"
+id="voiceToggle"
+checked>
+</li>
+
+<li>
+<span>🗑️ Clear Tasks</span>
+
+<button id="clearTaskBtn">
+Clear
+</button>
+</li>
+            <li id="logoutBtn">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Logout
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+
+<!-- MAIN -->
+
+<div class="main"
+id="dashboardSection">
+
+<div class="header">
+
+<h1 id="welcome"></h1>
+
+<p id="dateTime"></p>
+
+<button id="stopVoiceBtn">
+🔇 Stop Voice
+</button>
+
+</div>
+
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Tasks</h3>
+
+<p>12 Active Tasks</p>
+
+</div>
+
+<div class="card">
+
+<h3>Study Hours</h3>
+
+<p>5 Hours Today</p>
+
+</div>
+
+<div class="card">
+
+<h3>AI Suggestions</h3>
+
+<p>8 Recommendations</p>
+
+</div>
+
+<div class="card">
+
+<h3>Daily Motivation</h3>
+
+<p id="quote"></p>
+
+</div>
+
+</div>
+
+
+
+<!-- STUDY PLANNER -->
+
+<div class="planner"
+id="plannerSection">
+
+<h2>AI Study Planner</h2>
+
+<input
+type="text"
+id="subject"
+placeholder="Enter Subject">
+
+<input
+type="number"
+id="hours"
+placeholder="Study Hours">
+
+<button id="generateBtn">
+
+Generate Plan
+
+</button>
+
+<div id="planOutput"></div>
+
+</div>
+
+
+<br><br>
+
+
+
+<!-- NOTES -->
+
+<div class="planner"
+id="aiSection">
+
+<h2>AI Notes Summarizer</h2>
+
+<textarea
+id="notesInput"
+rows="6"
+placeholder="Paste notes">
+
+</textarea>
+
+<button id="summaryBtn">
+
+Summarize
+
+</button>
+
+<p id="summaryOutput"></p>
+
+<br>
+<input type="file" id="summaryFile" accept="image/*, video/*">
+
+<button id="analyzeSummary Btn"> Analyze File</button>
+
+</div>
+
+
+<br><br>
+
+
+
+<!-- CAREER -->
+
+<div class="planner">
+
+<h2>AI Career Mentor</h2>
+
+<input
+type="text"
+id="careerInput"
+placeholder="Dream Career">
+
+<button id="careerBtn">
+
+Generate
+
+</button>
+
+<p id="careerOutput"></p>
+
+</div>
+
+
+<br><br>
+
+<div class="planner">
+
+<h2>AI Interview Questions</h2>
+
+<input
+type="text"
+id="interviewInput"
+placeholder="Enter Job Role">
+
+<button id="interviewBtn">
+Generate Questions
+</button>
+
+<div id="interviewOutput"></div>
+
+</div>
+
+<br><br>
+<div class="planner">
+    <h2>AI Quiz Generator</h2>
+    <input type="text" id="quizinput" placeholder="Enter Subject">
+    <button id = 'quizBtn'>
+        Generate Quiz
+    </button>
+    <div id="quizOutput"></div>
+
+    <br><br>
+    <input type="file" id="quizFile" accept="image/*">
+    <button id="generateQuizFromFileBtn"> Generate Quiz FromFileBtn </button>
+</div>
+
+<br><br>
+
+
+
+<!-- TASK -->
+
+<div class="task-manager"
+id="taskSection">
+
+<h2>Task Manager</h2>
+
+<input
+type="text"
+id="taskInput"
+placeholder="Enter Task">
+
+<button id="addTaskBtn">
+
+Add Task
+
+</button>
+
+<ul id="taskList"></ul>
+<select id="priority">
+    <option value="High"> 🔴High </option>
+     <option value="Medium"> 🟡Medium </option>
+     <option value="Low"> 🟢Low </option>
+</select>
+<input type="date" id="dueDate">
+<br><br>
+<div id="taskStats">
+    <p>Total: <span id="totalTask">0</span></p>
+    <p>Complete: <span id="completedTask">0</span></p>
+</div>
+<progress id="progressBar" value="0" max="100"></progress>
+
+
+
+</div>
+<br><br>
+<div class="planner">
+
+<h2>AI Flashcard Generator</h2>
+
+<input
+type="text"
+id="flashcardInput"
+placeholder="Enter Topic">
+
+<button id="flashcardBtn">
+Generate Flashcards
+</button>
+
+<div id="flashcardOutput"></div>
+
+<br><br>
+<input type="file" id="flashcardFile" accept="image/*">
+
+<button id="generateFlashcardFromFileBtn"> Generate Flashcards From File</button>
+
+</div>
+
+<br><br>
+<div class="planner">
+
+<h2>Pomodoro Timer 🍅</h2>
+
+<p id="timerDisplay">
+25:00
+</p>
+
+<button id="startTimerBtn">
+Start
+</button>
+
+<button id="resetTimerBtn">
+Reset
+</button>
+
+</div>
+
+<br><br>
+<div class="planner">
+
+<h2>AI Resume Builder 📄</h2>
+
+<input
+type="text"
+id="resumeName"
+placeholder="Enter Name">
+
+<input
+type="text"
+id="resumeSkills"
+placeholder="Enter Skills">
+
+<input
+type="text"
+id="resumeEducation"
+placeholder="Enter Education">
+
+<input
+type="text"
+id="resumeProjects"
+placeholder="Enter Projects">
+
+<button id="resumeBtn">
+Generate Resume
+</button>
+
+<button id="downloadResumeBtn">
+Download Resume PDF
+</button>
+
+<div id="resumeOutput"></div>
+
+</div>
+
+
+
+</div>
+</div>
+</div>
+
+
+<script>
+
+function toggleSettings(){
+
+const menu=
+
+document.getElementById(
+"settingsDropdown"
+);
+
+if(menu.style.display==="none"){
+
+menu.style.display="block";
+
+}
+
+else{
+
+menu.style.display="none";
+
+}
+
+}
+
+</script>
+
+
+<script src="{{url_for('static',filename='miniproject1dashboard.js')}}"></script>
+
+</body>
+</html>
